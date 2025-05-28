@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": false,
+    "nodeVersion": "18.20.7",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.24.0"
+    },
+    "version": "1.20.0",
+    "libraryName": "cp-learning-portal-stg",
+    "libraryId": "027ebd18-8243-4a3a-8947-3d5c32b4beb4",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "CP Learning Portal Stg",
+    "solutionShortDescription": "CP Learning Portal Stg description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "spfx-webpart-banner-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spfxWebpartBanner/SpfxWebpartBannerWebPart.js",
+          "manifest": "./src/webparts/spfxWebpartBanner/SpfxWebpartBannerWebPart.manifest.json"
+        }
+      ]
+    },
+    "sp-fx-webpart-navbar-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spFxWebpartNavbar/SpFxWebpartNavbarWebPart.js",
+          "manifest": "./src/webparts/spFxWebpartNavbar/SpFxWebpartNavbarWebPart.manifest.json"
+        }
+      ]
+    },
+    "sp-fx-webpart-onboarding-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spFxWebpartOnboarding/SpFxWebpartOnboardingWebPart.js",
+          "manifest": "./src/webparts/spFxWebpartOnboarding/SpFxWebpartOnboardingWebPart.manifest.json"
+        }
+      ]
+    },
+    "sp-fx-webpart-technical-training-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spFxWebpartTechnicalTraining/SpFxWebpartTechnicalTrainingWebPart.js",
+          "manifest": "./src/webparts/spFxWebpartTechnicalTraining/SpFxWebpartTechnicalTrainingWebPart.manifest.json"
+        }
+      ]
+    },
+    "sp-fx-webpart-sales-tools-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spFxWebpartSalesTools/SpFxWebpartSalesToolsWebPart.js",
+          "manifest": "./src/webparts/spFxWebpartSalesTools/SpFxWebpartSalesToolsWebPart.manifest.json"
+        }
+      ]
+    },
+    "learning-provider-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/learningProvider/LearningProviderWebPart.js",
+          "manifest": "./src/webparts/learningProvider/LearningProviderWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "SpfxWebpartBannerWebPartStrings": "lib/webparts/spfxWebpartBanner/loc/{locale}.js",
+    "SpFxWebpartNavbarWebPartStrings": "lib/webparts/spFxWebpartNavbar/loc/{locale}.js",
+    "SpFxWebpartOnboardingWebPartStrings": "lib/webparts/spFxWebpartOnboarding/loc/{locale}.js",
+    "SpFxWebpartTechnicalTrainingWebPartStrings": "lib/webparts/spFxWebpartTechnicalTraining/loc/{locale}.js",
+    "SpFxWebpartSalesToolsWebPartStrings": "lib/webparts/spFxWebpartSalesTools/loc/{locale}.js",
+    "LearningProviderWebPartStrings": "lib/webparts/learningProvider/loc/{locale}.js"
+  }
+}
