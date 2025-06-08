@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { Item } from './ISpFxWebpartNavbarProps';
 
 interface ServicesProps {
-  servicesList: any[];
+  servicesList: Item[];
 }
 
 const Services: React.FC<ServicesProps> = ({servicesList}) => {

@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Course } from "../ISpFxWebpartOnboardingProps";
+import { Module } from "../ISpFxWebpartOnboardingProps";
 
 interface OptionalLabelProps{
     data: {
         VLP_NAME: string;
         VLP_PercentageComplete: number;
-        Courses: Course[];
+        modules: Module[];
       };
 }
 

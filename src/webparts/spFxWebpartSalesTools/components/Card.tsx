@@ -2,18 +2,21 @@ import '../../../../assets/dist/tailwind.css';
 import * as React from "react";
 import CardBody from "./CardBody";
 import CardHeader from "./CardHeader";
-import { Course } from './ISpFxWebpartSalesToolsProps';
+import { Module } from './ISpFxWebpartSalesToolsProps';
 
 interface CardProps {
-  course: Course;
+  module: Module;
 }
 
-const Card: React.FC<CardProps> = ({ course }) => {
+const Card: React.FC<CardProps> = ({ module }) => {
+ 
   return (
-    <div className="h-[247px] w-[225px] rounded-xl border-[1px]  border-stone-300 flex flex-col overflow-hidden hover:bg-gray-100 cursor-pointer"
-    onClick={() => window.open(course.accessUrl, `_blank`)}>
-      <CardHeader course={course}/>
-      <CardBody course={course} />
+    <div className="h-[247px] w-[225px] rounded-xl border-[1px]  border-stone-300 flex flex-col overflow-hidden cursor-pointer"
+   
+    onClick={() => window.open(module.accessUrl, `_blank`)}
+    >
+      <CardHeader module={module}/>
+      <CardBody module={module} />
     </div>
   );
 };

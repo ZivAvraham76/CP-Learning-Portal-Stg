@@ -10,6 +10,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'SpFxWebpartOnboardingWebPartStrings';
 import SpFxWebpartOnboarding from './components/SpFxWebpartOnboarding';
 import { ISpFxWebpartOnboardingProps } from './components/ISpFxWebpartOnboardingProps';
+import { Item } from './components/ISpFxWebpartOnboardingProps';
 
 export interface ISpFxWebpartOnboardingWebPartProps {
   description: string;
@@ -50,20 +51,20 @@ export default class SpFxWebpartOnboardingWebPart extends BaseClientSideWebPart<
       });
       const currentUser = await userRes.json();
 
-      const listRes = await fetch(`${siteUrl}/_api/web/lists/getbytitle('New Hires assigned')/items?$top=5000`, {
+      const listRes = await fetch(`${siteUrl}/_api/web/lists/getbytitle('onboarding_list')/items?$top=5000`, {
         method: "GET",
         headers: { "Accept": "application/json;odata=nometadata" }
       });
       const list = await listRes.json();
 
-      const matched = list.value.find((item: any) => {
-        if (!currentUser?.UserPrincipalName || !item.Email) return false;
+      const matched = list.value.find((item: Item) => {
+        if (!currentUser?.UserPrincipalName || !item.field_3) return false;
         const userPrefix = currentUser.UserPrincipalName.split('@')[0].toLowerCase();
-        const itemPrefix = item.Email.split('@')[0].toLowerCase();
+        const itemPrefix = item.field_3.split('@')[0].toLowerCase();
         return userPrefix === itemPrefix;
       });
 
-      return matched?.OnboardingId || null;
+      return matched?.field_18 || null;
 
     } catch (error) {
       console.error("Error checking onboarding list:", error);
@@ -123,17 +124,17 @@ export default class SpFxWebpartOnboardingWebPart extends BaseClientSideWebPart<
     return true;
   }
 
-  protected onPropertyPaneFieldChanged(propertyPath: string): void {
-    if (propertyPath === "description") {
-      this.render();
-    }
-    if (propertyPath === "backend_app_id") {
-      this.onInit().catch(err => console.error(err));
-    }
-    if (propertyPath === "backend_url") {
-      this.onInit().catch(err => console.error(err));
-    }
-  }
+  // protected onPropertyPaneFieldChanged(propertyPath: string): void {
+  //   if (propertyPath === "description") {
+  //     this.render();
+  //   }
+  //   if (propertyPath === "backend_app_id") {
+  //     this.onInit().catch(err => console.error(err));
+  //   }
+  //   if (propertyPath === "backend_url") {
+  //     this.onInit().catch(err => console.error(err));
+  //   }
+  // }
 
   protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
     if (!currentTheme) return;

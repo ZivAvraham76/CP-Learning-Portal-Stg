@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "6c916ab7-2247-4a87-8563-61df9a0c0d45",
+  "id": "37820f97-52d8-4809-9e77-11cad4ccf03c",
   "alias": "SpFxWebpartNavbarWebPart",
   "componentType": "WebPart",
 
@@ -15,7 +15,6 @@
   "supportedHosts": ["SharePointWebPart", "TeamsPersonalApp", "TeamsTab", "SharePointFullPage"],
   "supportsThemeVariants": true,
   "supportsFullBleed": true,
-
 
   "preconfiguredEntries": [{
     "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced

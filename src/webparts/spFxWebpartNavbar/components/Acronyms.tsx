@@ -45,7 +45,7 @@ const Acronyms: React.FC = () => {
 
 
   return (
-    <div className="ml-auto w-9 h-9 rounded-full flex items-center justify-center border-2 borderv-zinc-90 text-xl">
+    <div className="w-9 h-9 rounded-full flex items-center justify-center border-2 borderv-zinc-90 text-xl">
       {currentUser ? getInitials(currentUser.Title) : ''}
     </div>
   );

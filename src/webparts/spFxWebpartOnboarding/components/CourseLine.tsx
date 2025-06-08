@@ -1,19 +1,19 @@
 import '../../../../assets/dist/tailwind.css';
 import * as React from "react";
-import { Course } from "./ISpFxWebpartOnboardingProps";
 import SmallPercentage from './SmallPercentage';
 import Tooltip from './Tooltip';
+import { CourseRow } from './ISpFxWebpartOnboardingProps';
 
 interface CourseLineProps {
-  course: Course;
-  handleTrainingDataClick: (trainingObject: any) => void;
+  module: CourseRow;
+  handleTrainingDataClick: (trainingObject: string) => void;
 }
 
-const CourseLine: React.FC<CourseLineProps> = ({ course, handleTrainingDataClick }) => {
-  const Title = course.Code || course.course || '';
+const CourseLine: React.FC<CourseLineProps> = ({ module, handleTrainingDataClick }) => {
+  const Title = module.Code || module.course || '';
   const [tooltipVisible, setTooltipVisible] = React.useState(false);
   const [tooltipPosition, setTooltipPosition] = React.useState({ top: 0, left: 0 });
-  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) : void => {
     const rect = event.currentTarget.getBoundingClientRect();
     setTooltipPosition({
       top: rect.top - 40,
@@ -22,7 +22,7 @@ const CourseLine: React.FC<CourseLineProps> = ({ course, handleTrainingDataClick
     setTooltipVisible(true);
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = () : void => {
     setTooltipVisible(false);
   };
   return (
@@ -42,7 +42,7 @@ const CourseLine: React.FC<CourseLineProps> = ({ course, handleTrainingDataClick
         </div>
         <div>
           {/* Display the progress */}
-          <SmallPercentage PercentageComplete={course.coursePercentageComplete} />
+          <SmallPercentage PercentageComplete={module.coursePercentageComplete} />
         </div>
       </div>
     </div>

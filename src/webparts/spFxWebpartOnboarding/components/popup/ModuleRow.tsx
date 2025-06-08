@@ -25,7 +25,7 @@ const ModuleRow: React.FC<ModuleRowProps> = ({ module }) => {
         <div className="mr-5">
           {/* Display the module completion status */}
           <ModuleComplition
-            moduleCompleted={module.Completed}
+            moduleCompleted={module.completed}
             moduleStartDate={module.StartDate ?? undefined}
           />
         </div>
@@ -36,7 +36,7 @@ const ModuleRow: React.FC<ModuleRowProps> = ({ module }) => {
         {/* Display the module score */}
         <ModuleScore
           moduleScore={module.Score}
-          moduleCompleted={module.Completed}
+          moduleCompleted={module.completed}
         />
       </div>
     </div>

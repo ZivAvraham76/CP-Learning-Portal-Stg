@@ -3,13 +3,10 @@ import { useState } from 'react';
 import Header from "./Header";
 import CourseDescription from "./CourseDescription";
 import ModulesTable from "./ModulesTable";
-// import { Course } from "../ISpFxWebpartOnboardingProps";
-
-
+import { Module } from "../ISpFxWebpartOnboardingProps";
 
 interface CourseBoardProps {
-  courseData: any;
-
+  courseData: { courseName: string; modules: Module[]; };
 }
 
 const CourseBoard: React.FC<CourseBoardProps> = ({ courseData }) => {
@@ -44,7 +41,7 @@ const CourseBoard: React.FC<CourseBoardProps> = ({ courseData }) => {
       {isVisible && (
         <div className="">
           <div id="courseDiscriptionContainer" className="">
-            <CourseDescription courseDescription={courseData.modules[0].Description} />
+            <CourseDescription courseDescription={courseData.modules[0].courseDescription} />
           </div>
           <div id="moduleTableContainer" className="">
             <ModulesTable modules={courseData.modules} />

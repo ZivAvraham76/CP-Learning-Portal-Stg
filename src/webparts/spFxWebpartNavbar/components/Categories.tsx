@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { Item } from './ISpFxWebpartNavbarProps';
 
 
 interface CategoriesProps {
-  categoriesList: any[];
+  categoriesList: Item[];
 } 
 
 const Categories: React.FC <CategoriesProps> = ({categoriesList}) => {

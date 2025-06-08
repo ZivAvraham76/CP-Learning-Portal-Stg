@@ -4,15 +4,14 @@ import CourseDescription from "./CourseDescription";
 import ModulesTable from "./ModulesTable"
 import VlpTitle from "./VlpTitle";
 import VlpProgress from "./VlpProgress";
-// import { Course } from "../ISpfxOnboardingProps";
+import { Module } from "../ISpFxWebpartOnboardingProps";
 
 interface SingleCourseProps {
-  modules: any;
-  litmosLearningPathUrl?: string;
+  modules: Module[];
 }
 
 
-const SingleCourse: React.FC<SingleCourseProps> = ({ modules, litmosLearningPathUrl }) => {
+const SingleCourse: React.FC<SingleCourseProps> = ({ modules }) => {
   return (
     <div className="h-full w-full">
       {/* Header section containing course title and progress */}

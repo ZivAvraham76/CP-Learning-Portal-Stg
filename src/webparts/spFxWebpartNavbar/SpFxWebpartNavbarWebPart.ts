@@ -10,7 +10,8 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
 import * as strings from 'SpFxWebpartNavbarWebPartStrings';
 import SpFxWebpartNavbar from './components/SpFxWebpartNavbar';
-import { ISpFxWebpartNavbarProps } from './components/ISpFxWebpartNavbarProps';
+import { ISpFxWebpartNavbarProps, ListData } from './components/ISpFxWebpartNavbarProps';
+import { Item } from './components/ISpFxWebpartNavbarProps';
 
 export interface ISpFxWebpartNavbarWebPartProps {
   description: string;
@@ -21,8 +22,8 @@ export default class SpFxWebpartNavbarWebPart extends BaseClientSideWebPart<ISpF
 
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
-  private servicesList: any[];
-  private categoriesList: any[];
+  private servicesList: Item[];
+  private categoriesList: Item[];
 
   public render(): void {
     const element: React.ReactElement<ISpFxWebpartNavbarProps> = React.createElement(
@@ -49,7 +50,7 @@ export default class SpFxWebpartNavbarWebPart extends BaseClientSideWebPart<ISpF
 
   const [servicesData, categoriesData] = await Promise.all([
     this.fetchListData("Services", siteName),
-    this.fetchListData("Categories", siteName),
+    this.fetchListData("Categories", siteName, ),
   ]);
 
   this.servicesList = servicesData?.value || [];
@@ -116,7 +117,7 @@ export default class SpFxWebpartNavbarWebPart extends BaseClientSideWebPart<ISpF
     return Version.parse('1.0');
   }
 
-  protected fetchListData = async (listName: string, siteName: string): Promise<any | undefined> => {
+  protected fetchListData = async (listName: string, siteName: string): Promise<ListData | undefined> => {
     const currSite = `https://mosh12.sharepoint.com/sites/${siteName}`;
     const currList = listName;
     try {
@@ -131,7 +132,7 @@ export default class SpFxWebpartNavbarWebPart extends BaseClientSideWebPart<ISpF
         throw new Error(`Error fetching list data: ${response.statusText}`);
       }
 
-      const data: any = await response.json();
+      const data: ListData = await response.json();
       return data;
     } catch (error) {
       console.error("Error fetching list data:", error);
