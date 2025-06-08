@@ -104,6 +104,12 @@ export default class SpfxWebpartBannerWebPart extends BaseClientSideWebPart<ISpf
       pages: [
         {
           groups: [
+            {
+              groupName: "Dynamic Fields",
+              groupFields: [
+                
+              ]
+            }
           ]
         }
       ]

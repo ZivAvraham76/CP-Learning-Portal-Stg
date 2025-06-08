@@ -12,8 +12,8 @@ const Pillar: React.FC<PillarProps> = ({ selectedPillar, onPillarChange }) => {
 
     return (
         <div className="flex items-center gap-2 font-Poppins">
-            <div className="text-[#41273c] text-lg font-semibold">Pillar</div>
-            <div className="flex h-8 text-xs font-Poppins">
+            <div className="text-black text-lg font-semibold">Pillar</div>
+            <div className="flex text-xs font-Poppins">
                 {pillars?.map((pillar, index) => {
                     const isFirst = index === 0;
                     const isLast = index === pillars?.length - 1;

@@ -7,60 +7,83 @@ import '../../../../assets/dist/tailwind.css';
 import Carousel from './Carousel';
 import Filters from './Filters';
 import DropDownProducts from './DropDownProducts';
- 
+import { SalesToolsData } from "./ISpFxWebpartSalesToolsProps";
+
 const SpFxWebpartSalesTools: React.FC<ISpFxWebpartSalesToolsProps> = (props) => {
-  const dataService = LearningDataService.getInstance();
-  const [data, setData] = useState<any>(null);
+  const dataService: LearningDataService & { _events?: Record<string, unknown> } = LearningDataService.getInstance();
+  const [data, setData] = useState<SalesToolsData | null>(null);
   const { lp_id } = props;
- 
+
   useEffect(() => {
-    const handleDataResponse = (responseData: any) => {
+
+    // Add widescreen:scale-150 to CanvasSection after mount
+    const addCanvasSectionClass = (): void => {
+      const canvasSection = document.querySelector('[data-automation-id="CanvasSection"]');
+      if (canvasSection && !canvasSection.classList.contains('widescreen:scale-150')) {
+        canvasSection.classList.add('widescreen:scale-150');
+      }
+    };
+    // Observe the DOM for when CanvasSection gets added
+    const observer = new MutationObserver(() => {
+      addCanvasSectionClass();
+    });
+
+    // Start observing the body for changes
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+    addCanvasSectionClass();
+
+
+    const handleDataResponse = (responseData: SalesToolsData): void => {
       setData(responseData);
     };
- 
-    const waitForProvider = () => {
-    console.log(`Registering listener for sp-data/4sp/${lp_id}`);
-    // Listen for data responses
-    dataService.on(`sp-data/4sp/${lp_id}`, handleDataResponse);
- 
-    console.log(`Emitting event: requestData for sp-data/4sp/${lp_id}`);
-    // Request for data from the provider
-    dataService.emit(`requestData`, `sp-data/4sp/${lp_id}`);
+
+    const waitForProvider = (): void => {
+      console.log(`Registering listener for sp-data/4sp/${lp_id}`);
+      // Listen for data responses
+      dataService.on(`sp-data/4sp/${lp_id}`, handleDataResponse);
+
+      console.log(`Emitting event: requestData for sp-data/4sp/${lp_id}`);
+      // Request for data from the provider
+      dataService.emit(`requestData`, `sp-data/4sp/${lp_id}`);
     }
- 
-    if ((dataService as any)._events?.requestData) {
+
+    if (dataService._events?.requestData) {
       waitForProvider();
     } else {
       dataService.once("ready", () => {
         waitForProvider();
       });
     }
- 
+
     // Cleanup listener on unmount
     return () => {
       console.log("Removing listener for sp-data/4sp/${lp_id}");
       dataService.off(`sp-data/4sp/${lp_id}`, handleDataResponse);
+      observer.disconnect();
     };
   }, []);
- 
- 
+
+
   const { description } = props;
   const [selectedFilter, setSelectedFilter] = useState('Tool');
   const [selectedProduct, setSelectedProduct] = useState('All');
   const uniqueAdsm = ["Prospect", "Qualify", "Validate", "Prove", "Proposal", "Agreement", "Closed Won", "Closed Lost"];
   const uniqueRoles = ["Account Manager", "Channel Manager", "Security Engineer", "SDR", "Renewal"]
- 
+
   // Get unique courses from the training data
-  const uniqueCourses = Array.from(new Set(data?.modules?.map((item: { course: string }) => item.course)));
- 
+  const uniqueCourses = Array.from(new Set(data?.modules?.map((item: { course: string }) => item.course))) as string[];
+
   // Function to reset the selected product to all
   const onProductReset = (): void => {
     setSelectedProduct('All');
   };
- 
+
   return (
     <>
-    {/*loading spinner*/}
+      {/*loading spinner*/}
       {!data ? (
         <div className="flex justify-center items-center h-full w-full">
           <button disabled type="button" className="text-white bg-[#41273c]  hover:bg-[#896f85] hover:text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
@@ -72,28 +95,27 @@ const SpFxWebpartSalesTools: React.FC<ISpFxWebpartSalesToolsProps> = (props) => 
           </button>
         </div>
       ) : (
-        <div className="w-[960px] mx-auto relative overflow-visible m-8">
+        <div className=" w-[960px] widescreen:w-[1230px] desktop:w-[1600px] mt-[40px] mx-auto relative overflow-visible">
  
           {/* description */}
-          <h1 className="text-[#ee0c5d] text-[22px] mb-8 font-Poppins font-semibold">{description}</h1>
- 
+          <h1 className="text-black text-[22px] mb-4 font-Poppins font-semibold">{description}</h1>
           {/* filters and products controls */}
-          <div className="flex items-center justify-start space-x-4 max-w-full mb-8 overflow-visible">
+          <div className="flex items-center justify-start space-x-4 max-w-full mb-4 overflow-visible">
             <Filters selectedFilter={selectedFilter} onFilterChange={setSelectedFilter} onProductReset={onProductReset} />
             <DropDownProducts selectedProduct={selectedProduct} onProductChange={setSelectedProduct} selectedFilter={selectedFilter} uniqueCourses={uniqueCourses} uniqueAdsm={uniqueAdsm} uniqueRoles={uniqueRoles} />
           </div>
- 
+
           {/* Carousel displaying the courses */}
           <div id="carousel" className="flex gap-4 overflow-visible scrollbar-hide scroll-smooth"
             style={{ scrollSnapType: 'x mandatory', width: '100%', display: 'flex', flexWrap: 'nowrap' }}>
             <Carousel courses={data?.modules} selectedProduct={selectedProduct} selectedFilter={selectedFilter} uniqueRoles={uniqueRoles} />
           </div>
         </div>
- 
+
       )}
- 
+
     </>
   );
 };
- 
+
 export default SpFxWebpartSalesTools;

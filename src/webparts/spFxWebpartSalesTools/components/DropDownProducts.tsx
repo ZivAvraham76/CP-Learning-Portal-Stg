@@ -4,7 +4,7 @@ interface LevelsProps {
   selectedProduct: string;
   onProductChange: (level: string) => void;
   selectedFilter: string;
-  uniqueCourses: any[];
+  uniqueCourses: string[];
   uniqueAdsm: string[];
   uniqueRoles: string[];
 }
@@ -25,7 +25,7 @@ const DropDownProducts: React.FC<LevelsProps> = ({ selectedProduct, onProductCha
 
   // Close dropdown when clicking outside
   React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent) : void => {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)

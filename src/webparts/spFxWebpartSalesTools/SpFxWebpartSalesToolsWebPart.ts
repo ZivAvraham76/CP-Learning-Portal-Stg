@@ -75,6 +75,28 @@ export default class ISpFxWebpartSalesToolsWebPart extends BaseClientSideWebPart
     );
   }
  
+ 
+  // protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
+  //   if (!currentTheme) {
+  //     return;
+  //   }
+ 
+  //   const { semanticColors } = currentTheme;
+ 
+  //   if (semanticColors) {
+  //     this.domElement.style.setProperty(
+  //       "--bodyText",
+  //       semanticColors.bodyText || null
+  //     );
+  //     this.domElement.style.setProperty("--link", semanticColors.link || null);
+  //     this.domElement.style.setProperty(
+  //       "--linkHovered",
+  //       semanticColors.linkHovered || null
+  //     );
+  //   }
+  // }
+ 
+ 
   protected get disableReactivePropertyChanges(): boolean {
     return true;
   }
@@ -112,6 +134,9 @@ export default class ISpFxWebpartSalesToolsWebPart extends BaseClientSideWebPart
             {
               groupName: strings.BasicGroupName,
               groupFields: [
+                PropertyPaneTextField('description', {
+                  label: strings.DescriptionFieldLabel
+                })
               ]
             },
             {

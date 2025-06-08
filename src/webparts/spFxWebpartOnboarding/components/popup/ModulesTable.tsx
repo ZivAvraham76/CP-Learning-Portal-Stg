@@ -1,9 +1,9 @@
 import * as React from "react";
 import ModuleRow from "./ModuleRow";
-// import { Module } from "../ISpfxOnboardingProps";
+import { Module } from "../ISpFxWebpartOnboardingProps";
 
 interface ModuleTableProps{
-    modules: any[];
+    modules: Module[];
 }
 
 const ModuleTable: React.FC<ModuleTableProps> = ({ modules }) => {

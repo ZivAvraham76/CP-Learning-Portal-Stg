@@ -18,42 +18,43 @@ interface IUser {
 
 const SpfxWebpartBanner: React.FC<ISpfxWebpartBannerProps> = (props) => {
 
-  
+
   const [listItems, setListItems] = React.useState<IListItem[]>([]);
   // State to track the current index of the active item
   const [currentIndex, setCurrentIndex] = React.useState(0);
-  currentIndex; 
+
+  console.log(currentIndex, "currentIndex");
   // Filtration for active items
   const activeItems = listItems.filter(item => item.Active);
   const [currentUser, setCurrentUser] = useState<IUser | null>(null);
-    // Fetch the current user
-    const fetchCurrentUser = async (): Promise<void> => {
-      const siteUrl = "https://mosh12.sharepoint.com";
-  
-      try {
-        const response = await fetch(`${siteUrl}/_api/web/currentuser`, {
-          method: "GET",
-          headers: {
-            "Accept": "application/json;odata=nometadata"
-          }
-        });
-  
-        const data = await response.json();
-        setCurrentUser(data);
-  
-      } catch (error) {
-        console.error("Error fetching current user:", error);
-      }
-    };
-    
-    useEffect(() => {
-      // eslint-disable-next-line no-void
-      void fetchCurrentUser();
-    }, []);
-    const getFirstName = (fullName: string): string => {
-      const nameParts = fullName.trim().split(/\s+/); // Splits by one or more spaces
-      return nameParts[0] || ''; // Returns the first part (first name)
-    };
+  // Fetch the current user
+  const fetchCurrentUser = async (): Promise<void> => {
+    const siteUrl = "https://mosh12.sharepoint.com";
+
+    try {
+      const response = await fetch(`${siteUrl}/_api/web/currentuser`, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json;odata=nometadata"
+        }
+      });
+
+      const data = await response.json();
+      setCurrentUser(data);
+
+    } catch (error) {
+      console.error("Error fetching current user:", error);
+    }
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line no-void
+    void fetchCurrentUser();
+  }, []);
+  const getFirstName = (fullName: string): string => {
+    const nameParts = fullName.trim().split(/\s+/); // Splits by one or more spaces
+    return nameParts[0] || ''; // Returns the first part (first name)
+  };
 
   // fetch the list and its attachments
   React.useEffect(() => {
@@ -70,7 +71,7 @@ const SpfxWebpartBanner: React.FC<ISpfxWebpartBannerProps> = (props) => {
 
         const data = await response.json();
 
-        if (data.value) {    
+        if (data.value) {
           const updatedItems = await Promise.all(data.value.map(async (item: IListItem) => {
             let attachmentFiles = item.AttachmentFiles || [];
             if (item.Attachments) {
@@ -85,7 +86,7 @@ const SpfxWebpartBanner: React.FC<ISpfxWebpartBannerProps> = (props) => {
                 attachmentFiles = attachmentData.value;
               }
             }
-            return{
+            return {
               ...item,
               AttachmentFiles: attachmentFiles
             }
@@ -113,27 +114,59 @@ const SpfxWebpartBanner: React.FC<ISpfxWebpartBannerProps> = (props) => {
 
     // If there are multiple active items, we proceed with the usual logic for changing the image
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % activeItems.length); 
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % activeItems.length);
     }, 1000 * 5);
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, [listItems, 5]);
   return (
-    <div className="relative w-[1051px]  mx-auto p-8">
-      {/* Hello text positioned outside/above the banner */}
-      <div className="mb-4">
-        <div className="text-stone-700 text-xl font-semibold font-Poppins">
+
+
+    <div className="relative w-[907px] mt-[40px] mx-auto flex items-center justify-between">
+
+      {/* Left side - greeting text */}
+      <div className="flex flex-col items-start space-y-2">
+        <div className="text-stone-700 text-xl font-semibold font-Poppins p-1">
           Hello {currentUser ? getFirstName(currentUser.Title) : ''},
         </div>
-      </div>
-      
-      {/* Main banner container */}
-      <div className="w-full h-36 bg-gradient-to-r from-white rounded-3xl border border-zinc-800 flex items-center justify-center">
-        <div className="text-center text-stone-700 text-4xl font-bold font-Poppins">
-          Let's learn something new!
+        <div className="text-stone-700 text-4xl font-bold font-Poppins">
+          Let&apos;s learn something new!
         </div>
       </div>
+
+      {/* Right side - banner image and text from the list*/}
+      <div className="relative w-[392px] h-[163px]">
+      {activeItems.length > 0 && (
+        <>
+          {/* Display the active items only */}
+          {activeItems[currentIndex].Active && activeItems[currentIndex].AttachmentFiles?.length > 0 && (
+            <img
+              className="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-1000 ease-in-out"
+              src={`https://mosh12.sharepoint.com${activeItems[currentIndex].AttachmentFiles[0].ServerRelativeUrl}`}
+              alt="Banner"
+            />
+          )}
+          <p className="absolute inset-0 z-20 flex items-center text-center justify-center text-[#41273c] text-3xl font-bold">
+            {activeItems[currentIndex].banner_text}
+          </p>
+          {activeItems.length > 1 && (
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
+              {activeItems.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full bg-[#41273c] transition-all ${index === currentIndex ? 'bg-[#41273c]' : 'bg-[#41273c] opacity-50'
+                    }`}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+      </div>
     </div>
+
+
+
   );
 };
 

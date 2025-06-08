@@ -33,7 +33,7 @@ const Products: React.FC<ProductsProps> = ({ selectedProduct, onProductChange, c
 
     // Close dropdown when clicking outside
     React.useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+        const handleClickOutside = (event: MouseEvent) : void => {
             if (
                 dropdownRef.current &&
                 !dropdownRef.current.contains(event.target as Node)
@@ -50,8 +50,8 @@ const Products: React.FC<ProductsProps> = ({ selectedProduct, onProductChange, c
 
     return (
         <div ref={dropdownRef} className="relative inline-block text-left h-full">
-            <button onClick={toggleDropdown} className="w-[170px] h-8 px-2 py-1 pr-8 rounded-full text-[#41273c] text-lg border-[1px] border-[#41273c] flex items-center justify-between">
-                <span className="text-[#41273c] text-xs font-medium font-Poppins">
+            <button onClick={toggleDropdown} className="px-2 py-1 pr-8 rounded-full text-[#41273c] text-lg border-[1px] border-[#41273c] flex items-center justify-between">
+                <span className="text-[#41273c] text-xs font-medium font-Poppins whitespace-nowrap">
                     {selectedProduct === "Select Product" ? "Select Product" : selectedProduct}
                 </span>
                 <svg className="absolute right-2" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -3,33 +3,13 @@ import * as React from "react";
 const DoneSvgIcon: React.FC = () => {
 
   return (
-    <div className="h-full w-full text-green-500">
-      <svg className="" viewBox="0 0 28.85 28.85">
-        <g id="Layer_1-2">
-          <circle
-            className="fill-[#EE0C5D] stroke-0"
-            cx="14.42"
-            cy="14.42"
-            r="14.42"
-          />
-          <rect
-            className="fill-white"
-            x="7.23"
-            y="14.55"
-            width="7.7"
-            height="2.78"
-            transform="translate(14.52 -3.17) rotate(45)"
-          />
-          <rect
-            className="fill-white"
-            x="11.38"
-            y="12.47"
-            width="10.67"
-            height="2.78"
-            transform="translate(-4.9 15.88) rotate(-45)"
-          />
-        </g>
+    <div className=" flex  space-x-2">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.5 8.82874C17.5 13.5232 13.6944 17.3287 9 17.3287C4.30558 17.3287 0.5 13.5232 0.5 8.82874C0.5 4.13432 4.30558 0.328735 9 0.328735C13.6944 0.328735 17.5 4.13432 17.5 8.82874Z" fill="#6FD195" />
       </svg>
+
+      {/* Text next to the icon */}
+      <span className="w-24 h-5  text-zinc-950 text-[10px] font-normal font-Poppins">Completed</span>
     </div>
   );
 };

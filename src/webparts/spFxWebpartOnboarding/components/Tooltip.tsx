@@ -17,7 +17,7 @@ const Tooltip: React.FC<TooltipProps> = ({ content, position, visible }) => {
       style={{ top: position.top, left: position.left, maxWidth: '300px' }}
     >
       {content}
-      <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+      <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"/>
     </div>,
     document.body
   );

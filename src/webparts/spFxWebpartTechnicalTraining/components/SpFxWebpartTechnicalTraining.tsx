@@ -6,45 +6,63 @@ import '../../../../assets/dist/tailwind.css';
 import CourseCarousel from './Carousel';
 import Pillars from './Pillars';
 import Products from './Products';
-import { trainingObject } from './ISpFxWebpartTechnicalTrainingProps';
+import { trainingObject, TrainingData } from './ISpFxWebpartTechnicalTrainingProps';
 import CoursesBoard from './popup/CoursesBoard';
 
 const SpFxWebpartTechnicalTraining: React.FC<ISpFxWebpartTechnicalTrainingProps> = (props) => {
   const { description, fetchListData } = props;
-  const dataService = LearningDataService.getInstance();
-  const [trainingData, setTrainingData] = useState<any>(null);
+  const dataService: LearningDataService & { _events?: Record<string, unknown> } = LearningDataService.getInstance();
+  const [trainingData, setTrainingData] = useState<TrainingData | undefined>(undefined);
 
   // Effect to fetch training data when the component mounts
   useEffect(() => {
+    const addCanvasSectionClass = (): void => {
+      const canvasSection = document.querySelector('[data-automation-id="CanvasSection"]');
+      if (canvasSection && !canvasSection.classList.contains('widescreen:scale-150')) {
+        canvasSection.classList.add('widescreen:scale-150');
+      }
+    };
+
+    // Observe the DOM for when CanvasSection gets added
+    const observer = new MutationObserver(() => {
+      addCanvasSectionClass();
+    });
+
+    // Start observing the body for changes
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    // Run immediately in case it's already there
+    addCanvasSectionClass();
+
     const endpoint = "sp-data/4sp";
-    const handleTrainingDataResponse = (responseData: any) => {
+    const handleTrainingDataResponse = (responseData: TrainingData): void => {
       setTrainingData(responseData);
     };
 
+
     // Fetch the list data and emit the event
-    const startRequest = async () => {
+    const waitForProvider = async (): Promise<void> => {
       const listOfTrainingData = await fetchListData();
       dataService.on(endpoint, handleTrainingDataResponse);
       dataService.emit("requestData", endpoint, { listOfTrainingData });
     };
 
-    // Check if the provider is ready and start the request
-    const waitForProvider = () => {
-      dataService.once("ready", () => {
-        startRequest();
-      });
-    };
-
     // Check if the provider has already emitted the requestData event. If it has, we can start the request immediately
-    if ((dataService as any)._events?.requestData) {
-      startRequest();
+    if (dataService._events?.requestData) {
+      waitForProvider().catch(console.error);
     } else {
-      waitForProvider();
+      dataService.once("ready", (): void => {
+        waitForProvider().catch(console.error);
+      });
     }
 
     // Cleanup listener on unmount
     return () => {
       dataService.off(`sp-data/4sp`, handleTrainingDataResponse);
+      observer.disconnect();
     };
   }, []);
 
@@ -68,7 +86,6 @@ const SpFxWebpartTechnicalTraining: React.FC<ISpFxWebpartTechnicalTrainingProps>
 
   // ref to hold the popup element
   const popupRef = useRef<HTMLDivElement>(null);
-
   // Function to handle changes in the course subject pillar filter
   const handlePillarChange = (pillar: string): void => {
     setSelectedPillar(pillar);
@@ -118,18 +135,29 @@ const SpFxWebpartTechnicalTraining: React.FC<ISpFxWebpartTechnicalTrainingProps>
     setSelectedTraining(trainingObject);
 
     //Handle the response from the provider and set it in the courses data
-    const responseHandler = (courseData: any) => {
+    const responseHandler = (courseData: Course[]): void => {
       setTrainingDataCourses(courseData);
       setIsCoursesBoardVisible(true);
       setIsLoading(false);
       dataService.off(courseUrl, responseHandler); // Clean up
     };
 
-    // Listen for the response from the provider
-    dataService.on(courseUrl, responseHandler);
-    dataService.emit("requestData", courseUrl);
-  };
 
+    // Function to request course data from provider
+    const requestCourseDetails = async (): Promise<void> => {
+      dataService.on(courseUrl, responseHandler);
+      dataService.emit("requestData", courseUrl);
+    };
+
+    // Check if the provider has already emitted the requestData event
+    if (dataService._events?.requestData) {
+      requestCourseDetails().catch(console.error);
+    } else {
+      dataService.once("ready", (): void => {
+        requestCourseDetails().catch(console.error);
+      });
+    }
+  };
   return (
     // loading spinner
     <>{!trainingData ? (<div className="flex justify-center items-center h-full w-full">
@@ -141,8 +169,7 @@ const SpFxWebpartTechnicalTraining: React.FC<ISpFxWebpartTechnicalTrainingProps>
         Loading...
       </button>
     </div>) : (
-      <div className="w-full max-w-[960px] mx-auto relative overflow-visible m-8">
-        {/* Loading indicator that matches the image */}
+      <div className="relative mt-[40px]">
         {isLoading && (
           <div className="fixed inset-0 flex justify-center items-center z-50 bg-[#896f8563]">
             <div className="bg-[#41273c] text-white py-2 px-4 rounded-full flex items-center space-x-2 shadow-lg">
@@ -162,18 +189,22 @@ const SpFxWebpartTechnicalTraining: React.FC<ISpFxWebpartTechnicalTrainingProps>
               selectedTraining={selectedTraining}
             /></div>
         )}
-        {/* description */}
-        <div className="text-[#ee0c5d] text-[22px] mb-8 font-Poppins font-semibold">{description}</div>
-        {/* Pillars and products controls */}
-        <div className="flex items-center justify-start space-x-4 max-w-full mb-8 overflow-visible">
-          <Pillars selectedPillar={selectedPillar} onPillarChange={handlePillarChange} />
-          <Products selectedProduct={selectedProduct} onProductChange={handelProductChange} courses={trainingData?.producttraining} selectedPillar={selectedPillar} />
-        </div>
-        {/* Carousel displaying the courses */}
-        <div id="carousel" className="flex gap-4 overflow-visible scrollbar-hide scroll-smooth"
-          style={{ scrollSnapType: 'x mandatory', width: '100%', display: 'flex', flexWrap: 'nowrap' }}>
-          < CourseCarousel courses={trainingData?.producttraining} selectedPillar={selectedPillar} selectedProduct={selectedProduct}
-            handleTrainingDataClick={(trainingObject: trainingObject) => handleTrainingDataClick(trainingObject)} />
+        <div className="w-[960px]  widescreen:w-[1230px] desktop:w-[1600px]  mx-auto relative overflow-visible">
+          {/* Loading indicator that matches the image */}
+
+          {/* description */}
+          <div className="text-black text-[22px] mb-4 font-Poppins font-semibold">{description}</div>
+          {/* Pillars and products controls */}
+          <div className="flex items-center justify-start space-x-4 max-w-full mb-4 overflow-visible">
+            <Pillars selectedPillar={selectedPillar} onPillarChange={handlePillarChange} />
+            <Products selectedProduct={selectedProduct} onProductChange={handelProductChange} courses={trainingData?.producttraining} selectedPillar={selectedPillar} />
+          </div>
+          {/* Carousel displaying the courses */}
+          <div id="carousel" className="flex gap-4 overflow-visible scrollbar-hide scroll-smooth"
+            style={{ scrollSnapType: 'x mandatory', width: '100%', display: 'flex', flexWrap: 'nowrap' }}>
+            < CourseCarousel courses={trainingData?.producttraining} selectedPillar={selectedPillar} selectedProduct={selectedProduct}
+              handleTrainingDataClick={(trainingObject: trainingObject) => handleTrainingDataClick(trainingObject)} />
+          </div>
         </div>
       </div>
     )

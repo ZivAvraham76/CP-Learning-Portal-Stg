@@ -15,15 +15,15 @@ interface CourseBoardProps {
 const CoursesBoard = forwardRef<HTMLDivElement, CourseBoardProps>(({ Courses, handleTrainingDataClick, selectedTraining }, ref) => {
 
   // Extract VLP data
-  const VLP_PercentageComplete =   selectedTraining?.PercentageComplete;
+  const VLP_PercentageComplete =  selectedTraining?.PercentageComplete;
   const VLP_NAME = selectedTraining?.litmosLearningPathName;
   
   const litmosLearningPathUrl = selectedTraining?.litmosLearningPathUrl;
   
   
   return (
-    <div ref={ref} className="h-screen w-full py-10">
-      <div className="mx-auto h-full w-9/12 rounded-3xl border-4 border-[#f0f2f4] bg-white px-10 py-10" onClick={(e) => e.stopPropagation()}>
+    <div ref={ref} className="h-auto  w-full py-10 flex items-center justify-center">
+      <div className="mx-auto max-h-[500px] overflow-y-auto w-9/12 rounded-3xl border-4 border-[#f0f2f4] bg-white px-10 py-10" onClick={(e) => e.stopPropagation()}>
         <div className="max-h-full overflow-y-auto px-5">
           {/* If there's only one course, render the SingleCourse component */}
           {Courses?.length === 1 ? (

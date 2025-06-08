@@ -1,30 +1,50 @@
 // import { AadHttpClient } from '@microsoft/sp-http';
 
 export interface Module {
-  Name: string,
-  Score: number,
-  Completed: boolean,
-  StartDate: string | undefined,
-  accessUrl: string,
-}
-
-export interface Course {
   id: string;
   adsm: string;
-  name: string;
+  Name: string;
   role: string;
-  originalid: number;
+  originalId: number;
   levelName: string;
   completed: boolean;
   course: string;
   cid: string;
   coriginalid: number;
   accessUrl: string;
+  CourseImageURL: string;
+  StartDate: string;
+  Score: number;
+  courseDescription: string,
+  courseId: string,
+  Code: string,
+  isOptional: boolean,
+  coursePercentageComplete: number,
+  courseComplete: boolean,
+}
+
+interface LearningPath {
+  Name: string;
+  PercentageComplete: number;
+}
+
+
+export interface OnboardingData {
+  modules: Module[];
+  learningPath: LearningPath;
+}
+
+export interface Item{
+  Email: string;
+  field_3: string;
+  OnboardingId: string;
+  field_18: string;
+}
+
+export interface CourseRow {
+  course?: string;
+  Code?: string;
   coursePercentageComplete: number;
-  Code: string;
-  isOptional: boolean;
-  Description: string;
-  Modules: Module[];
 }
 
 
