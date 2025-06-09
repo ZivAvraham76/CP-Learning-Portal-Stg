@@ -15,7 +15,7 @@ import { CourseRow } from "./ISpFxWebpartOnboardingProps";
 
 const SpFxWebpartOnboarding: React.FC<ISpFxWebpartOnboardingProps> = (props) => {
   const { onboardingId } = props;
-  const dataService = LearningDataService.getInstance();
+  const dataService: LearningDataService & { _events?: Record<string, unknown> } = LearningDataService.getInstance();
   const [data, setData] = useState<OnboardingData | null>(null);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const SpFxWebpartOnboarding: React.FC<ISpFxWebpartOnboardingProps> = (props) => 
       dataService.emit("requestData", `sp-data/4sp/${onboardingId}`);
     }
 
-    if ((dataService as any)._events?.requestData) {
+    if (dataService._events?.requestData) {
       waitForProvider();
     } else {
       dataService.once("ready", () => {
@@ -184,6 +184,8 @@ const SpFxWebpartOnboarding: React.FC<ISpFxWebpartOnboardingProps> = (props) => 
 
               {/* Right Side - images and ProgressBar */}
               <div className="relative w-[410px] h-[290px] pr-8 pt-8">
+
+
                 {/* images */}
                 <div className='relative h-[300px] translate-x-[70px] '>
                   <svg width="266" height="265" viewBox="0 0 266 274" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">

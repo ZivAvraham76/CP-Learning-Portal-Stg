@@ -40,14 +40,14 @@ export default class LearningProviderWebPart extends BaseClientSideWebPart<ILear
         
       );
 
-      this.fetchUserDepartmentAndRegion();
+      await this.fetchUserDepartmentAndRegion();
     } catch (error) {
       console.error("Error initalizing API client:", error);
     }
   }
 
   // Fetch user department and region from Microsoft Graph
-  private async fetchUserDepartmentAndRegion() {
+  private async fetchUserDepartmentAndRegion(): Promise<void> {
 
     const graphClient = await this.context.aadHttpClientFactory.getClient("https://graph.microsoft.com");
 
